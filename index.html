@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Connections Game Site</title>
+<style>
+  /* --- Reset and basics --- */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #a8dadc, #caf0f8, #b7e4c7);
+    color: #334e68;
+    overflow-x: hidden;
+    position: relative;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* --- Floating hearts background --- */
+  body::before, body::after {
+    content: "♥";
+    position: fixed;
+    font-size: 20px;
+    opacity: 0.15;
+    color: #ffb3ba;
+    animation: floatUp 15s linear infinite;
+    user-select: none;
+    z-index: 0;
+  }
+  body::after {
+    content: "♡";
+    font-size: 15px;
+    color: #b8f2e6;
+    animation-delay: 7s;
+  }
+  @keyframes floatUp {
+    0% {
+      transform: translateY(100vh) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.15;
+    }
+    100% {
+      transform: translateY(-10vh) translateX(50vw) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  /* Additional multiple hearts using pseudo elements with random positions */
+  /* We'll add 8 hearts with absolute positioning */
+
+  .heart {
+    position: fixed;
+    font-size: 18px;
+    opacity: 0.12;
+    color: #ffb3ba;
+    user-select: none;
+    animation: floatUp 18s linear infinite;
+    z-index: 0;
+  }
+  .heart:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    font-size: 22px;
+    color: #ffb3ba;
+  }
+  .heart:nth-child(2) {
+    left: 30%;
+    animation-delay: 3s;
+    font-size: 16px;
+    color: #b8f2e6;
+  }
+  .heart:nth-child(3) {
+    left: 50%;
+    animation-delay: 5s;
+    font-size: 20px;
+    color: #ffb3ba;
+  }
+  .heart:nth-child(4) {
+    left: 70%;
+    animation-delay: 8s;
+    font-size: 14px;
+    color: #b8f2e6;
+  }
+  .heart:nth-child(5) {
+    left: 85%;
+    animation-delay: 2s;
+    font-size: 18px;
+    color: #ffb3ba;
+  }
+  .heart:nth-child(6) {
+    left: 20%;
+    animation-delay: 10s;
+    font-size: 16px;
+    color: #b8f2e6;
+  }
+  .heart:nth-child(7) {
+    left: 40%;
+    animation-delay: 12s;
+    font-size: 19px;
+    color: #ffb3ba;
+  }
+  .heart:nth-child(8) {
+    left: 60%;
+    animation-delay: 6s;
+    font-size: 15px;
+    color: #b8f2e6;
+  }
+
+  /* --- Header with tabs --- */
+  header {
+    background: #b7e4c7;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #90be6d;
+    position: relative;
+    z-index: 1;
+  }
+  nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  nav button {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #276749;
+    border-bottom: 3px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+    border-radius: 4px 4px 0 0;
+  }
+  nav button.active,
+  nav button:hover {
+    color: #2a9d8f;
+    border-bottom-color: #2a9d8f;
+    background: #caf0f8;
+  }
+
+  /* --- Main content --- */
+  main {
+    flex-grow: 1;
+    padding: 2rem 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+
+  /* --- Home Page --- */
+  #home h1 {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+    color: #2a9d8f;
+  }
+  #home p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #276749;
+  }
+
+  /* --- Game styles --- */
+  #instructions {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+    color: #276749;
+    user-select: none;
+  }
+  #game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 1rem;
+  }
+  .img-card {
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+    background: #e0f7fa;
+    box-shadow: 0 2px 6px rgba(42, 157, 143, 0.3);
+    position: relative;
+  }
+  .img-card img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+  }
+  .img-card.selected {
+    border-color: #2a9d8f;
+    box-shadow: 0 0 12px 3px #2a9d8faa;
+  }
+  .img-card.matched {
+    border-color: #90be6d;
+    box-shadow: 0 0 12px 3px #90be6daa;
+    cursor: default;
+    opacity: 0.75;
+  }
+
+  #category-reveal {
+    margin-top: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2a9d8f;
+    min-height: 1.6rem;
+    text-align: center;
+    user-select: none;
+  }
+  #reset-btn {
+    margin-top: 1.5rem;
+    background: #2a9d8f;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background 0.3s ease;
+    box-shadow: 0 3px 7px rgba(42, 157, 143, 0.6);
+  }
+  #reset-btn:hover {
+    background: #21867a;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <button class="tab-btn active" data-tab="home" aria-selected="true" role="tab" id="tab-home">Home</button>
+    <button class="tab-btn" data-tab="game" aria-selected="false" role="tab" id="tab-game">Connections Game</button>
+  </nav>
+</header>
+
+<main>
+  <!-- Home Tab -->
+  <section id="home" class="active" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
+    <h1>Welcome to Connections Game</h1>
+    <p>
+      Test your brainpower by finding groups of related images! Click images you think belong together. 
+      When you find a correct group, the category is revealed. Have fun!
+    </p>
+  </section>
+
+  <!-- Game Tab -->
+  <section id="game" role="tabpanel" aria-labelledby="tab-game" tabindex="0">
+    <div id="instructions">
+      Click images to select 4 that you believe form a group.
+    </div>
+    <div id="game-board" aria-label="Connections game board"></div>
+    <div id="category-reveal" aria-live="polite"></div>
+    <button id="reset-btn" aria-label="Reset game">Reset Game</button>
+  </section>
+</main>
+
+<!-- Floating hearts -->
+<div class="heart" style="top: 90vh;">♥</div>
+<div class="heart" style="top: 80vh;">♡</div>
+<div class="heart" style="top: 75vh;">♥</div>
+<div class="heart" style="top: 70vh;">♡</div>
+<div class="heart" style="top: 60vh;">♥</div>
+<div class="heart" style="top: 55vh;">♡</div>
+<div class="heart" style="top: 50vh;">♥</div>
+<div class="heart" style="top: 45vh;">♡</div>
+
+<script>
+  // Tab switching with ARIA support
+  const tabs = document.querySelectorAll(".tab-btn");
+  const sections = document.querySelectorAll("main section");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+      });
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+
+      const target = tab.dataset.tab;
+      sections.forEach(sec => {
+        sec.classList.toggle("active", sec.id === target);
+      });
+    });
+  });
+
+  // Game code
+
+  const categories = {
+    "Fruits": [
+      { id: "apple", label: "Apple", img: "https://via.placeholder.com/150/FFB3BA/fff?text=Apple" },
+      { id: "banana", label: "Banana", img: "https://via.placeholder.com/150/FFE680/000?text=Banana" },
+      { id: "orange", label: "Orange", img: "https://via.placeholder.com/150/FFAB5E/fff?text=Orange" },
+      { id: "grape", label: "Grape", img: "https://via.placeholder.com/150/D8BFD8/000?text=Grape" }
+    ],
+    "Animals": [
+      { id: "cat", label: "Cat", img: "https://via.placeholder.com/150/A0C4FF/000?text=Cat" },
+      { id: "dog", label: "Dog", img: "https://via.placeholder.com/150/FFADAD/000?text=Dog" },
+      { id: "lion", label: "Lion", img: "https://via.placeholder.com/150/FFD6A5/000?text=Lion" },
+      { id: "elephant", label: "Elephant", img: "https://via.placeholder.com/150/B5EAEA/000?text=Elephant" }
+    ],
+    "Vehicles": [
+      { id: "car", label: "Car", img: "https://via.placeholder.com/150/A8DADC/000?text=Car" },
+      { id: "bike", label: "Bike", img: "https://via.placeholder.com/150/CAF0F8/000?text=Bike" },
+      { id: "plane", label: "Plane", img: "https://via.placeholder.com/150/FFB6B9/000?text=Plane" },
+      { id: "boat", label: "Boat", img: "https://via.placeholder.com/150/BFD8B8/000?text=Boat" }
+    ],
+    "Colors": [
+      { id: "red", label: "Red", img: "https://via.placeholder.com/150/FF6B6B/fff?text=Red" },
+      { id: "blue", label: "Blue", img: "https://via.placeholder.com/150/4D96FF/fff?text=Blue" },
+      { id: "green", label: "Green", img: "https://via.placeholder.com/150/8BC34A/fff?text=Green" },
+      { id: "yellow", label: "Yellow", img: "https://via.placeholder.com/150/FFF176/000?text=Yellow" }
+    ]
+  };
+
+  let allImages = [];
+  for (const cat in categories) {
+    allImages = allImages.concat(categories[cat]);
+  }
+  // Shuffle function
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+  shuffle(allImages);
+
+  const gameBoard = document.getElementById("game-board");
+  const categoryReveal = document.getElementById("category-reveal");
+  const resetBtn = document.getElementById("reset-btn");
+
+  let selectedImages = [];
+  let matchedGroups = 0;
+
+  function createCard(image) {
+    const card = document.createElement("div");
+    card.className = "img-card";
+    card.dataset.id = image.id;
+    card.dataset.label = image.label;
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-pressed", "false");
+    card.setAttribute("aria-label", `${image.label} image`);
+
+    const img = document.createElement("img");
+    img.src = image.img;
+    img.alt = image.label;
+
+    card.appendChild(img);
+
+    card.addEventListener("click", () => selectCard(card));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        selectCard(card);
+      }
+    });
+
+    return card;
+  }
+
+  function selectCard(card) {
+    if (card.classList.contains("matched")) return;
+
+    if (selectedImages.includes(card)) {
+      card.classList.remove("selected");
+      card.setAttribute("aria-pressed", "false");
+      selectedImages = selectedImages.filter(c => c !== card);
+    } else {
+      if (selectedImages.length < 4) {
+        card.classList.add("selected");
+        card.setAttribute("aria-pressed", "true");
+        selectedImages.push(card);
+      }
+    }
+
+    if (selectedImages.length === 4) {
+      checkSelection();
+    }
+  }
+
+  function checkSelection() {
+    const selectedIds = selectedImages.map(card => card.dataset.id);
+    let foundCategory = null;
+
+    outer:
+    for (const [cat, imgs] of Object.entries(categories)) {
+      const catIds = imgs.map(img => img.id);
+      if (selectedIds.every(id => catIds.includes(id)) && catIds.every(id => selectedIds.includes(id))) {
+        foundCategory = cat;
+        break outer;
+      }
+    }
+
+    if (foundCategory) {
+      selectedImages.forEach(card => {
+        card.classList.remove("selected");
+        card.classList.add("matched");
+        card.style.borderColor = "#90be6d";
+        card.style.boxShadow = "0 0 12px 3px #90be6daa";
+        card.style.cursor = "default";
+        card.setAttribute("aria-pressed", "true");
+      });
+      categoryReveal.textContent = `Group found: ${foundCategory}`;
+      matchedGroups++;
+      if (matchedGroups === Object.keys(categories).length) {
+        categoryReveal.textContent += " 🎉 You found all groups!";
+      }
+    } else {
+      categoryReveal.textContent = "Try again!";
+      selectedImages.forEach(card => {
+        card.classList.remove("selected");
+        card.style.borderColor = "transparent";
+        card.style.boxShadow = "0 2px 6px rgba(42, 157, 143, 0.3)";
+        card.setAttribute("aria-pressed", "false");
+      });
+    }
+    selectedImages = [];
+  }
+
+  function initGame() {
+    matchedGroups = 0;
+    categoryReveal.textContent = "";
+    selectedImages = [];
+    gameBoard.innerHTML = "";
+    shuffle(allImages);
+    allImages.forEach(img => {
+      const card = createCard(img);
+      gameBoard.appendChild(card);
+    });
+  }
+
+  resetBtn.addEventListener("click", initGame);
+
+  // Initialize game on page load
+  initGame();
+</script>
+
+</body>
+</html>
+

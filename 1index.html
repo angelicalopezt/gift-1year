@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>happy 1 year anniversary <3</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --main-bg: #9DACCC;
+      --accent: #C0C9DB;
+      --deep: #485F88;
+      --ink: #121524;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle, #C0C9DB, #485F88);
+      font-family: 'Lugrasimo', cursive;
+      color: var(--ink);
+      overflow-x: hidden;
+      text-transform: lowercase;
+    }
+
+    nav {
+      background-image: url('paper_clean.png');
+      background-repeat: repeat;
+      background-size: auto;
+      padding: 12px;
+      font-family: 'Ephesis', cursive;
+      text-align: center;
+      border-bottom: 4px solid #6A7BA2;
+      box-shadow: 0 5px 15px rgba(234, 234, 241, 0.5);
+      border-radius: 0 0 20px 20px;
+      font-size: 2em;
+    }
+
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    section {
+      display: none;
+      padding: 30px 10%;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .title-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 15vh;
+      gap: 35px;
+      user-select: none;
+    }
+
+    h1 {
+      font-size: 4.5em;
+      color: transparent;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), #ffffff 0%, #485F88 35%, transparent 65%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      animation: floatTitle 6s ease-in-out infinite alternate;
+      margin: 0;
+      text-align: center;
+    }
+
+    .heart-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      animation: sparkle 2.5s infinite, floatTitle 6s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+    }
+
+    @keyframes floatTitle {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+
+    @keyframes sparkle {
+      0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+      }
+      50% {
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
+      }
+    }
+
+    /* Envelope and note */
+    .blurb {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 20px;
+    }
+
+    .envelope {
+      width: 150px; /* made larger */
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope:hover {
+      transform: scale(1.1);
+    }
+
+    .note {
+      max-width: 90%;
+      border-radius: 0;
+      background-image: url('notebook.png');
+      padding: 20px;
+      font-size: 1.3em;
+      color: var(--ink);
+      font-family: 'Lugrasimo', cursive;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      user-select: none;
+      display: none;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .note.active {
+      display: block;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 20px;
+      font-family: 'Lugrasimo', cursive;
+    }
+
+    .filmstrip-container {
+      position: relative;
+      overflow: hidden;
+      margin: 40px 0;
+      background: #111;
+      padding: 20px 0;
+      border-radius: 10px;
+      box-shadow: inset 0 0 10px #000;
+    }
+
+    .filmstrip {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-name: scrollFilm;
+      animation-fill-mode: forwards;
+      width: max-content; /* This is key to prevent image clipping */
+    }
+
+    .filmstrip-container:nth-of-type(1) .filmstrip {
+      animation-duration: 60s;
+    }
+
+    .filmstrip-container:nth-of-type(2) .filmstrip {
+      animation-duration: 45s;
+      animation-direction: reverse;
+    }
+
+    .filmstrip-container:nth-of-type(3) .filmstrip {
+      animation-duration: 70s;
+    }
+
+    .filmstrip img {
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+      filter: sepia(0.4) contrast(1.1) brightness(0.9);
+      animation: flicker 1.5s infinite steps(2, end);
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .filmstrip img:hover {
+      transform: scale(1.05);
+      filter: sepia(0.2) contrast(1.3) brightness(1.1);
+      z-index: 10;
+      position: relative;
+    }
+
+    .filmstrip-container::before,
+    .filmstrip-container::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 20px;
+      background: repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.1) 0 10px,
+        transparent 10px 20px
+      );
+      z-index: 2;
+    }
+
+    .filmstrip-container::before {
+      top: 0;
+    }
+
+    .filmstrip-container::after {
+      bottom: 0;
+    }
+
+    @keyframes scrollFilm {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.95; }
+      75% { opacity: 0.9; }
+    }
+
+    @media (max-width: 768px) {
+      .filmstrip img {
+        height: 100px;
+      }
+    }
+
+    .heart-img {
+      width: 60px;
+      height: 60px;
+    }
+
+    h1 {
+      font-size: 2.8em;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255,255,255,0.7);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Frame styling & animation for quiz */
+    .frame-wrapper {
+      background-image: url('frame.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 60px 40px;
+      box-sizing: border-box;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 60px 20px rgba(255, 255, 255, 0.1),
+        0 0 40px 10px rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      backdrop-filter: blur(2px);
+    }
+
+    .animated-frame {
+      animation: floatFrame 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatFrame {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    /* New styles for video section */
+    #dots video {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      outline: none;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #dots h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Lugrasimo', cursive;
+      font-size: 2em;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Title spotlight effect
+      document.addEventListener("mousemove", (e) => {
+        const h1 = document.querySelector("h1");
+        if (!h1) return;
+        const rect = h1.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        h1.style.setProperty('--x', `${x}%`);
+        h1.style.setProperty('--y', `${y}%`);
+      });
+
+      // Section switching
+      window.showSection = (id) => {
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      };
+
+      // Modal image viewer
+      const modalOverlay = document.createElement('div');
+      modalOverlay.classList.add('modal-overlay');
+      document.body.appendChild(modalOverlay);
+
+      modalOverlay.addEventListener('click', () => {
+        modalOverlay.classList.remove('active');
+        modalOverlay.innerHTML = '';
+      });
+
+      document.querySelectorAll('.filmstrip img').forEach(img => {
+        img.addEventListener('click', () => {
+          modalOverlay.innerHTML = '';
+          const modalImg = document.createElement('img');
+          modalImg.src = img.src;
+          modalImg.alt = img.alt;
+          modalOverlay.appendChild(modalImg);
+          modalOverlay.classList.add('active');
+        });
+      });
+
+      // Envelope click toggles love letter note
+      const envelope = document.querySelector(".envelope");
+      const note = document.querySelector(".note");
+      if (envelope && note) {
+        envelope.addEventListener("click", () => {
+          note.classList.toggle("active");
+        });
+      }
+
+      // Quiz logic
+      const quizData = [
+        { question: "where was our first date?", options: ["the MET", "the MOMA"], answer: "the MOMA" },
+        { question: "who said i love you first?", options: ["angelica", "samir"], answer: "angelica" },
+        { question: "what song were we listening to when you<br>asked me to be your girlfriend?", options: ["horsepower by daniel caesar", "white ferrari by frank ocean"], answer: "horsepower by daniel caesar" },
+        { question: "what were we watching before our first kiss?", options: ["beastars", "princess mononoke"], answer: "beastars" }
+      ];
+
+      let currentQ = 0;
+      const quizQuestion = document.getElementById('quiz-question');
+      const quizOptions = document.getElementById('quiz-options');
+      const quizFeedback = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('next-btn');
+
+      function loadQuiz() {
+        const q = quizData[currentQ];
+        quizQuestion.innerHTML = q.question;
+        quizOptions.innerHTML = "";
+        quizFeedback.textContent = "";
+        nextBtn.style.display = "none";
+
+        q.options.forEach(option => {
+          const btn = document.createElement("button");
+          btn.textContent = option;
+          btn.style.margin = "5px";
+          btn.onclick = () => {
+            if (option === q.answer) {
+              quizFeedback.textContent = "correct!";
+              btn.style.backgroundColor = "#c5e4d6";
+            } else {
+              quizFeedback.textContent = "try again";
+              btn.style.backgroundColor = "#ffd6d6";
+            }
+            nextBtn.style.display = "inline-block";
+          };
+          quizOptions.appendChild(btn);
+        });
+      }
+
+      nextBtn.onclick = () => {
+        currentQ++;
+        if (currentQ < quizData.length) {
+          loadQuiz();
+        } else {
+          quizQuestion.textContent = "you remembered everything! i love you!";
+          quizOptions.innerHTML = "";
+          quizFeedback.textContent = "";
+          nextBtn.style.display = "none";
+        }
+      };
+
+      loadQuiz();
+    });
+  </script>
+</head>
+
+<body>
+  <nav>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('portfolio')">filmstrips</a>
+    <a href="#" onclick="showSection('quiz')">quiz</a>
+    <a href="#" onclick="showSection('dots')">...</a>
+  </nav>
+
+  <section id="home" class="active">
+    <div class="title-container">
+      <img src="heart.png" alt="heart" class="heart-img" />
+      <h1>happy 1 year anniversary &lt;3</h1>
+      <img src="heart.png" alt="heart" class="heart-img" />
+    </div>
+    <div class="blurb">
+      <img src="envelope.png" alt="love letter" class="envelope" />
+      <div class="note">
+        dear samir,<br><br>
+        happy anniversary!! i feel so fortunate that we've spent the past year together. i have grown significantly as a person since we first met and have learned a great deal about myself. i love that it feels like we can grow and change together, you inspire me to be a better person, and I hope I do the same for you. being loved by you and being able to love you makes me so content. you make me feel safe and secure in a way that I didn't know was possible in a romantic relationship, and you've allowed me to be my authentic self (even if it sometimes catches you off guard, hehe). i appreciate how you've tried to get to know me and understand me on such a deep level, and how you've opened up to me even in times when it might've been tough. you are so much more than just my boyfriend; you are my partner, you are my best friend. throughout this year, along with all the amazing memories, we've also faced some difficulties, whether in our individual lives or together. the fact that we have been able to navigate so much and still remain in a healthy, evolving relationship gives me confidence that we'll continue to thrive together through the challenges and new opportunities that await us. often, when I look at you, i am in disbelief. not because I think you're handsome (even though I do), but because i am so grateful and in awe of the fact that by some cosmic coincidence amid all that chaos in the Spring of 2024, we met. pieces of a jigsaw puzzle that no one knew existed fell into place, and now I'm with someone that I can genuinely see a future with. and not just any future, but one where I am happy and still myself, and you are still you, and somehow, we are even better together. i love you so much, samir. <br><br>
+        love,<br>
+        angelica
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <h2>filmstrips</h2>
+
+    <div class="filmstrip-container">
+      <div class="filmstrip">
+        <img src="1.jpg"><img src="2.jpg"><img src="3.jpg">
+        <img src="4.jpg"><img src="5.jpg"><img src="6.jpg">
+        <img src="1.jpg"><img src="2.jpg"><img src="3.jpg">
+        <img src="4.jpg"><img src="5.jpg"><img src="6.jpg">
+        <img src="19.jpg"><img src="20.jpg">
+      </div>
+    </div>
+
+    <div class="filmstrip-container">
+      <div class="filmstrip">
+        <img src="7.jpg"><img src="8.jpg"><img src="9.jpg">
+        <img src="10.jpg"><img src="11.jpg"><img src="12.jpg">
+        <img src="7.jpg"><img src="8.jpg"><img src="9.jpg">
+        <img src="10.jpg"><img src="11.jpg"><img src="12.jpg">
+        <img src="21.jpg"><img src="22.jpg">
+      </div>
+    </div>
+
+    <div class="filmstrip-container">
+      <div class="filmstrip">
+        <img src="13.jpg"><img src="14.jpg"><img src="15.jpg">
+        <img src="16.jpg"><img src="17.jpg"><img src="18.jpg">
+        <img src="13.jpg"><img src="14.jpg"><img src="15.jpg">
+        <img src="16.jpg"><img src="17.jpg"><img src="18.jpg">
+        <img src="23.jpg"><img src="24.jpg">
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <h2>quiz</h2>
+    <div class="frame-wrapper animated-frame">
+      <div>
+        <p id="quiz-question" style="font-size: 1.5em; margin-bottom: 15px;"></p>
+        <div id="quiz-options"></div>
+        <p id="quiz-feedback" style="font-weight: bold; margin-top: 15px;"></p>
+        <button id="next-btn" style="margin-top: 20px; display:none;">next</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="dots">
+    <h2>
+    <video controls>
+      <source src="I hope you like!!-2.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </section>
+
+</body>
+</html>

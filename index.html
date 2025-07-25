@@ -1,463 +1,517 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Connections Game Site</title>
-<style>
-  /* --- Reset and basics --- */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(135deg, #a8dadc, #caf0f8, #b7e4c7);
-    color: #334e68;
-    overflow-x: hidden;
-    position: relative;
-  }
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>happy 1 year anniversary <3</title>
 
-  /* --- Floating hearts background --- */
-  body::before, body::after {
-    content: "♥";
-    position: fixed;
-    font-size: 20px;
-    opacity: 0.15;
-    color: #ffb3ba;
-    animation: floatUp 15s linear infinite;
-    user-select: none;
-    z-index: 0;
-  }
-  body::after {
-    content: "♡";
-    font-size: 15px;
-    color: #b8f2e6;
-    animation-delay: 7s;
-  }
-  @keyframes floatUp {
-    0% {
-      transform: translateY(100vh) translateX(0) rotate(0deg);
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ephesis&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --main-bg: #9DACCC;
+      --accent: #C0C9DB;
+      --deep: #485F88;
+      --ink: #121524;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle, #C0C9DB, #485F88);
+      font-family: 'Lugrasimo', cursive;
+      color: var(--ink);
+      overflow-x: hidden;
+      text-transform: lowercase;
+    }
+
+    nav {
+      background-image: url('paper_clean.png');
+      background-repeat: repeat;
+      background-size: auto;
+      padding: 12px;
+      font-family: 'Ephesis', cursive;
+      text-align: center;
+      border-bottom: 4px solid #6A7BA2;
+      box-shadow: 0 5px 15px rgba(234, 234, 241, 0.5);
+      border-radius: 0 0 20px 20px;
+      font-size: 2em;
+    }
+
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    section {
+      display: none;
+      padding: 30px 10%;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .title-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 15vh;
+      gap: 35px;
+      user-select: none;
+    }
+
+    h1 {
+      font-size: 4.5em;
+      color: transparent;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), #ffffff 0%, #485F88 35%, transparent 65%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      animation: floatTitle 6s ease-in-out infinite alternate;
+      margin: 0;
+      text-align: center;
+    }
+
+    .heart-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      animation: sparkle 2.5s infinite, floatTitle 6s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+    }
+
+    @keyframes floatTitle {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+
+    @keyframes sparkle {
+      0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+      }
+      50% {
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
+      }
+    }
+
+    /* Envelope and note */
+    .blurb {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 20px;
+    }
+
+    .envelope {
+      width: 150px; /* made larger */
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope:hover {
+      transform: scale(1.1);
+    }
+
+    .note {
+      max-width: 90%;
+      border-radius: 0;
+      background-image: url('notebook.png');
+      padding: 20px;
+      font-size: 1.3em;
+      color: var(--ink);
+      font-family: 'Lugrasimo', cursive;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      user-select: none;
+      display: none;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .note.active {
+      display: block;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 20px;
+      font-family: 'Lugrasimo', cursive;
+    }
+
+    .filmstrip-container {
+      position: relative;
+      overflow: hidden;
+      margin: 40px 0;
+      background: #111;
+      padding: 20px 0;
+      border-radius: 10px;
+      box-shadow: inset 0 0 10px #000;
+    }
+
+    .filmstrip {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-name: scrollFilm;
+      animation-fill-mode: forwards;
+      width: max-content; /* This is key to prevent image clipping */
+    }
+
+    .filmstrip-container:nth-of-type(1) .filmstrip {
+      animation-duration: 60s;
+    }
+
+    .filmstrip-container:nth-of-type(2) .filmstrip {
+      animation-duration: 45s;
+      animation-direction: reverse;
+    }
+
+    .filmstrip-container:nth-of-type(3) .filmstrip {
+      animation-duration: 70s;
+    }
+
+    .filmstrip img {
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+      filter: sepia(0.4) contrast(1.1) brightness(0.9);
+      animation: flicker 1.5s infinite steps(2, end);
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .filmstrip img:hover {
+      transform: scale(1.05);
+      filter: sepia(0.2) contrast(1.3) brightness(1.1);
+      z-index: 10;
+      position: relative;
+    }
+
+    .filmstrip-container::before,
+    .filmstrip-container::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 20px;
+      background: repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.1) 0 10px,
+        transparent 10px 20px
+      );
+      z-index: 2;
+    }
+
+    .filmstrip-container::before {
+      top: 0;
+    }
+
+    .filmstrip-container::after {
+      bottom: 0;
+    }
+
+    @keyframes scrollFilm {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.95; }
+      75% { opacity: 0.9; }
+    }
+
+    @media (max-width: 768px) {
+      .filmstrip img {
+        height: 100px;
+      }
+    }
+
+    .heart-img {
+      width: 60px;
+      height: 60px;
+    }
+
+    h1 {
+      font-size: 2.8em;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
       opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
-    10% {
-      opacity: 0.15;
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
     }
-    100% {
-      transform: translateY(-10vh) translateX(50vw) rotate(360deg);
-      opacity: 0;
+
+    .modal-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255,255,255,0.7);
+      cursor: pointer;
+      user-select: none;
     }
-  }
-  /* Additional multiple hearts using pseudo elements with random positions */
-  /* We'll add 8 hearts with absolute positioning */
 
-  .heart {
-    position: fixed;
-    font-size: 18px;
-    opacity: 0.12;
-    color: #ffb3ba;
-    user-select: none;
-    animation: floatUp 18s linear infinite;
-    z-index: 0;
-  }
-  .heart:nth-child(1) {
-    left: 10%;
-    animation-delay: 0s;
-    font-size: 22px;
-    color: #ffb3ba;
-  }
-  .heart:nth-child(2) {
-    left: 30%;
-    animation-delay: 3s;
-    font-size: 16px;
-    color: #b8f2e6;
-  }
-  .heart:nth-child(3) {
-    left: 50%;
-    animation-delay: 5s;
-    font-size: 20px;
-    color: #ffb3ba;
-  }
-  .heart:nth-child(4) {
-    left: 70%;
-    animation-delay: 8s;
-    font-size: 14px;
-    color: #b8f2e6;
-  }
-  .heart:nth-child(5) {
-    left: 85%;
-    animation-delay: 2s;
-    font-size: 18px;
-    color: #ffb3ba;
-  }
-  .heart:nth-child(6) {
-    left: 20%;
-    animation-delay: 10s;
-    font-size: 16px;
-    color: #b8f2e6;
-  }
-  .heart:nth-child(7) {
-    left: 40%;
-    animation-delay: 12s;
-    font-size: 19px;
-    color: #ffb3ba;
-  }
-  .heart:nth-child(8) {
-    left: 60%;
-    animation-delay: 6s;
-    font-size: 15px;
-    color: #b8f2e6;
-  }
+    /* Frame styling & animation for quiz */
+    .frame-wrapper {
+      background-image: url('frame.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 60px 40px;
+      box-sizing: border-box;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 60px 20px rgba(255, 255, 255, 0.1),
+        0 0 40px 10px rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      backdrop-filter: blur(2px);
+    }
 
-  /* --- Header with tabs --- */
-  header {
-    background: #b7e4c7;
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid #90be6d;
-    position: relative;
-    z-index: 1;
-  }
-  nav {
-    display: flex;
-    gap: 1.5rem;
-  }
-  nav button {
-    background: none;
-    border: none;
-    padding: 1rem 2rem;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: #276749;
-    border-bottom: 3px solid transparent;
-    transition: color 0.3s, border-color 0.3s;
-    border-radius: 4px 4px 0 0;
-  }
-  nav button.active,
-  nav button:hover {
-    color: #2a9d8f;
-    border-bottom-color: #2a9d8f;
-    background: #caf0f8;
-  }
+    .animated-frame {
+      animation: floatFrame 6s ease-in-out infinite alternate;
+    }
 
-  /* --- Main content --- */
-  main {
-    flex-grow: 1;
-    padding: 2rem 1.5rem;
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-  section {
-    display: none;
-  }
-  section.active {
-    display: block;
-  }
+    @keyframes floatFrame {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
 
-  /* --- Home Page --- */
-  #home h1 {
-    font-size: 3rem;
-    margin-bottom: 0.75rem;
-    color: #2a9d8f;
-  }
-  #home p {
-    font-size: 1.25rem;
-    line-height: 1.6;
-    color: #276749;
-  }
+    /* New styles for video section */
+    #dots video {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      outline: none;
+      display: block;
+      margin: 0 auto;
+    }
 
-  /* --- Game styles --- */
-  #instructions {
-    font-size: 1.1rem;
-    margin-bottom: 0.6rem;
-    color: #276749;
-    user-select: none;
-  }
-  #game-board {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-top: 1rem;
-  }
-  .img-card {
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    border: 3px solid transparent;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    user-select: none;
-    background: #e0f7fa;
-    box-shadow: 0 2px 6px rgba(42, 157, 143, 0.3);
-    position: relative;
-  }
-  .img-card img {
-    width: 100%;
-    display: block;
-    border-radius: 12px;
-  }
-  .img-card.selected {
-    border-color: #2a9d8f;
-    box-shadow: 0 0 12px 3px #2a9d8faa;
-  }
-  .img-card.matched {
-    border-color: #90be6d;
-    box-shadow: 0 0 12px 3px #90be6daa;
-    cursor: default;
-    opacity: 0.75;
-  }
+    #dots h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Lugrasimo', cursive;
+      font-size: 2em;
+    }
+  </style>
 
-  #category-reveal {
-    margin-top: 1.5rem;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #2a9d8f;
-    min-height: 1.6rem;
-    text-align: center;
-    user-select: none;
-  }
-  #reset-btn {
-    margin-top: 1.5rem;
-    background: #2a9d8f;
-    border: none;
-    padding: 0.7rem 1.4rem;
-    border-radius: 8px;
-    color: white;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    user-select: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    transition: background 0.3s ease;
-    box-shadow: 0 3px 7px rgba(42, 157, 143, 0.6);
-  }
-  #reset-btn:hover {
-    background: #21867a;
-  }
-</style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Title spotlight effect
+      document.addEventListener("mousemove", (e) => {
+        const h1 = document.querySelector("h1");
+        if (!h1) return;
+        const rect = h1.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        h1.style.setProperty('--x', `${x}%`);
+        h1.style.setProperty('--y', `${y}%`);
+      });
+
+      // Section switching
+      window.showSection = (id) => {
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      };
+
+      // Modal image viewer
+      const modalOverlay = document.createElement('div');
+      modalOverlay.classList.add('modal-overlay');
+      document.body.appendChild(modalOverlay);
+
+      modalOverlay.addEventListener('click', () => {
+        modalOverlay.classList.remove('active');
+        modalOverlay.innerHTML = '';
+      });
+
+      document.querySelectorAll('.filmstrip img').forEach(img => {
+        img.addEventListener('click', () => {
+          modalOverlay.innerHTML = '';
+          const modalImg = document.createElement('img');
+          modalImg.src = img.src;
+          modalImg.alt = img.alt;
+          modalOverlay.appendChild(modalImg);
+          modalOverlay.classList.add('active');
+        });
+      });
+
+      // Envelope click toggles love letter note
+      const envelope = document.querySelector(".envelope");
+      const note = document.querySelector(".note");
+      if (envelope && note) {
+        envelope.addEventListener("click", () => {
+          note.classList.toggle("active");
+        });
+      }
+
+      // Quiz logic
+      const quizData = [
+        { question: "where was our first date?", options: ["the MET", "the MOMA"], answer: "the MOMA" },
+        { question: "who said i love you first?", options: ["angelica", "samir"], answer: "angelica" },
+        { question: "what song were we listening to when you<br>asked me to be your girlfriend?", options: ["horsepower by daniel caesar", "white ferrari by frank ocean"], answer: "horsepower by daniel caesar" },
+        { question: "what were we watching before our first kiss?", options: ["beastars", "princess mononoke"], answer: "beastars" }
+      ];
+
+      let currentQ = 0;
+      const quizQuestion = document.getElementById('quiz-question');
+      const quizOptions = document.getElementById('quiz-options');
+      const quizFeedback = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('next-btn');
+
+      function loadQuiz() {
+        const q = quizData[currentQ];
+        quizQuestion.innerHTML = q.question;
+        quizOptions.innerHTML = "";
+        quizFeedback.textContent = "";
+        nextBtn.style.display = "none";
+
+        q.options.forEach(option => {
+          const btn = document.createElement("button");
+          btn.textContent = option;
+          btn.style.margin = "5px";
+          btn.onclick = () => {
+            if (option === q.answer) {
+              quizFeedback.textContent = "correct!";
+              btn.style.backgroundColor = "#c5e4d6";
+            } else {
+              quizFeedback.textContent = "try again";
+              btn.style.backgroundColor = "#ffd6d6";
+            }
+            nextBtn.style.display = "inline-block";
+          };
+          quizOptions.appendChild(btn);
+        });
+      }
+
+      nextBtn.onclick = () => {
+        currentQ++;
+        if (currentQ < quizData.length) {
+          loadQuiz();
+        } else {
+          quizQuestion.textContent = "you remembered everything! i love you!";
+          quizOptions.innerHTML = "";
+          quizFeedback.textContent = "";
+          nextBtn.style.display = "none";
+        }
+      };
+
+      loadQuiz();
+    });
+  </script>
 </head>
+
 <body>
-
-<header>
   <nav>
-    <button class="tab-btn active" data-tab="home" aria-selected="true" role="tab" id="tab-home">Home</button>
-    <button class="tab-btn" data-tab="game" aria-selected="false" role="tab" id="tab-game">Connections Game</button>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('portfolio')">filmstrips</a>
+    <a href="#" onclick="showSection('quiz')">quiz</a>
+    <a href="#" onclick="showSection('dots')">...</a>
   </nav>
-</header>
 
-<main>
-  <!-- Home Tab -->
-  <section id="home" class="active" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
-    <h1>Welcome to Connections Game</h1>
-    <p>
-      Test your brainpower by finding groups of related images! Click images you think belong together. 
-      When you find a correct group, the category is revealed. Have fun!
-    </p>
-  </section>
-
-  <!-- Game Tab -->
-  <section id="game" role="tabpanel" aria-labelledby="tab-game" tabindex="0">
-    <div id="instructions">
-      Click images to select 4 that you believe form a group.
+  <section id="home" class="active">
+    <div class="title-container">
+      <img src="heart.png" alt="heart" class="heart-img" />
+      <h1>happy 1 year anniversary &lt;3</h1>
+      <img src="heart.png" alt="heart" class="heart-img" />
     </div>
-    <div id="game-board" aria-label="Connections game board"></div>
-    <div id="category-reveal" aria-live="polite"></div>
-    <button id="reset-btn" aria-label="Reset game">Reset Game</button>
+    <div class="blurb">
+      <img src="envelope.png" alt="love letter" class="envelope" />
+      <div class="note">
+        dear samir,<br><br>
+        happy anniversary!! i feel so fortunate that we've spent the past year together. i have grown significantly as a person since we first met and have learned a great deal about myself. i love that it feels like we can grow and change together, you inspire me to be a better person, and I hope I do the same for you. being loved by you and being able to love you makes me so content. you make me feel safe and secure in a way that I didn't know was possible in a romantic relationship, and you've allowed me to be my authentic self (even if it sometimes catches you off guard, hehe). i appreciate how you've tried to get to know me and understand me on such a deep level, and how you've opened up to me even in times when it might've been tough. you are so much more than just my boyfriend; you are my partner, you are my best friend. throughout this year, along with all the amazing memories, we've also faced some difficulties, whether in our individual lives or together. the fact that we have been able to navigate so much and still remain in a healthy, evolving relationship gives me confidence that we'll continue to thrive together through the challenges and new opportunities that await us. often, when I look at you, i am in disbelief. not because I think you're handsome (even though I do), but because i am so grateful and in awe of the fact that by some cosmic coincidence amid all that chaos in the Spring of 2024, we met. pieces of a jigsaw puzzle that no one knew existed fell into place, and now I'm with someone that I can genuinely see a future with. and not just any future, but one where I am happy and still myself, and you are still you, and somehow, we are even better together. i love you so much, samir. <br><br>
+        love,<br>
+        angelica
+      </div>
+    </div>
   </section>
-</main>
 
-<!-- Floating hearts -->
-<div class="heart" style="top: 90vh;">♥</div>
-<div class="heart" style="top: 80vh;">♡</div>
-<div class="heart" style="top: 75vh;">♥</div>
-<div class="heart" style="top: 70vh;">♡</div>
-<div class="heart" style="top: 60vh;">♥</div>
-<div class="heart" style="top: 55vh;">♡</div>
-<div class="heart" style="top: 50vh;">♥</div>
-<div class="heart" style="top: 45vh;">♡</div>
+  <section id="portfolio">
+    <h2>filmstrips</h2>
 
-<script>
-  // Tab switching with ARIA support
-  const tabs = document.querySelectorAll(".tab-btn");
-  const sections = document.querySelectorAll("main section");
+    <div class="filmstrip-container">
+      <div class="filmstrip">
+        <img src="1.jpg"><img src="2.jpg"><img src="3.jpg">
+        <img src="4.jpg"><img src="5.jpg"><img src="6.jpg">
+        <img src="1.jpg"><img src="2.jpg"><img src="3.jpg">
+        <img src="4.jpg"><img src="5.jpg"><img src="6.jpg">
+        <img src="19.jpg"><img src="20.jpg">
+      </div>
+    </div>
 
-  tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      tabs.forEach(t => {
-        t.classList.remove("active");
-        t.setAttribute("aria-selected", "false");
-      });
-      tab.classList.add("active");
-      tab.setAttribute("aria-selected", "true");
+    <div class="filmstrip-container">
+      <div class="filmstrip">
+        <img src="7.jpg"><img src="8.jpg"><img src="9.jpg">
+        <img src="10.jpg"><img src="11.jpg"><img src="12.jpg">
+        <img src="7.jpg"><img src="8.jpg"><img src="9.jpg">
+        <img src="10.jpg"><img src="11.jpg"><img src="12.jpg">
+        <img src="21.jpg"><img src="22.jpg">
+      </div>
+    </div>
 
-      const target = tab.dataset.tab;
-      sections.forEach(sec => {
-        sec.classList.toggle("active", sec.id === target);
-      });
-    });
-  });
+    <div class="filmstrip-container">
+      <div class="filmstrip">
+        <img src="13.jpg"><img src="14.jpg"><img src="15.jpg">
+        <img src="16.jpg"><img src="17.jpg"><img src="18.jpg">
+        <img src="13.jpg"><img src="14.jpg"><img src="15.jpg">
+        <img src="16.jpg"><img src="17.jpg"><img src="18.jpg">
+        <img src="23.jpg"><img src="24.jpg">
+      </div>
+    </div>
+  </section>
 
-  // Game code
+  <section id="quiz">
+    <h2>quiz</h2>
+    <div class="frame-wrapper animated-frame">
+      <div>
+        <p id="quiz-question" style="font-size: 1.5em; margin-bottom: 15px;"></p>
+        <div id="quiz-options"></div>
+        <p id="quiz-feedback" style="font-weight: bold; margin-top: 15px;"></p>
+        <button id="next-btn" style="margin-top: 20px; display:none;">next</button>
+      </div>
+    </div>
+  </section>
 
-  const categories = {
-    "Fruits": [
-      { id: "apple", label: "Apple", img: "https://via.placeholder.com/150/FFB3BA/fff?text=Apple" },
-      { id: "banana", label: "Banana", img: "https://via.placeholder.com/150/FFE680/000?text=Banana" },
-      { id: "orange", label: "Orange", img: "https://via.placeholder.com/150/FFAB5E/fff?text=Orange" },
-      { id: "grape", label: "Grape", img: "https://via.placeholder.com/150/D8BFD8/000?text=Grape" }
-    ],
-    "Animals": [
-      { id: "cat", label: "Cat", img: "https://via.placeholder.com/150/A0C4FF/000?text=Cat" },
-      { id: "dog", label: "Dog", img: "https://via.placeholder.com/150/FFADAD/000?text=Dog" },
-      { id: "lion", label: "Lion", img: "https://via.placeholder.com/150/FFD6A5/000?text=Lion" },
-      { id: "elephant", label: "Elephant", img: "https://via.placeholder.com/150/B5EAEA/000?text=Elephant" }
-    ],
-    "Vehicles": [
-      { id: "car", label: "Car", img: "https://via.placeholder.com/150/A8DADC/000?text=Car" },
-      { id: "bike", label: "Bike", img: "https://via.placeholder.com/150/CAF0F8/000?text=Bike" },
-      { id: "plane", label: "Plane", img: "https://via.placeholder.com/150/FFB6B9/000?text=Plane" },
-      { id: "boat", label: "Boat", img: "https://via.placeholder.com/150/BFD8B8/000?text=Boat" }
-    ],
-    "Colors": [
-      { id: "red", label: "Red", img: "https://via.placeholder.com/150/FF6B6B/fff?text=Red" },
-      { id: "blue", label: "Blue", img: "https://via.placeholder.com/150/4D96FF/fff?text=Blue" },
-      { id: "green", label: "Green", img: "https://via.placeholder.com/150/8BC34A/fff?text=Green" },
-      { id: "yellow", label: "Yellow", img: "https://via.placeholder.com/150/FFF176/000?text=Yellow" }
-    ]
-  };
-
-  let allImages = [];
-  for (const cat in categories) {
-    allImages = allImages.concat(categories[cat]);
-  }
-  // Shuffle function
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
-  shuffle(allImages);
-
-  const gameBoard = document.getElementById("game-board");
-  const categoryReveal = document.getElementById("category-reveal");
-  const resetBtn = document.getElementById("reset-btn");
-
-  let selectedImages = [];
-  let matchedGroups = 0;
-
-  function createCard(image) {
-    const card = document.createElement("div");
-    card.className = "img-card";
-    card.dataset.id = image.id;
-    card.dataset.label = image.label;
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("role", "button");
-    card.setAttribute("aria-pressed", "false");
-    card.setAttribute("aria-label", `${image.label} image`);
-
-    const img = document.createElement("img");
-    img.src = image.img;
-    img.alt = image.label;
-
-    card.appendChild(img);
-
-    card.addEventListener("click", () => selectCard(card));
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        selectCard(card);
-      }
-    });
-
-    return card;
-  }
-
-  function selectCard(card) {
-    if (card.classList.contains("matched")) return;
-
-    if (selectedImages.includes(card)) {
-      card.classList.remove("selected");
-      card.setAttribute("aria-pressed", "false");
-      selectedImages = selectedImages.filter(c => c !== card);
-    } else {
-      if (selectedImages.length < 4) {
-        card.classList.add("selected");
-        card.setAttribute("aria-pressed", "true");
-        selectedImages.push(card);
-      }
-    }
-
-    if (selectedImages.length === 4) {
-      checkSelection();
-    }
-  }
-
-  function checkSelection() {
-    const selectedIds = selectedImages.map(card => card.dataset.id);
-    let foundCategory = null;
-
-    outer:
-    for (const [cat, imgs] of Object.entries(categories)) {
-      const catIds = imgs.map(img => img.id);
-      if (selectedIds.every(id => catIds.includes(id)) && catIds.every(id => selectedIds.includes(id))) {
-        foundCategory = cat;
-        break outer;
-      }
-    }
-
-    if (foundCategory) {
-      selectedImages.forEach(card => {
-        card.classList.remove("selected");
-        card.classList.add("matched");
-        card.style.borderColor = "#90be6d";
-        card.style.boxShadow = "0 0 12px 3px #90be6daa";
-        card.style.cursor = "default";
-        card.setAttribute("aria-pressed", "true");
-      });
-      categoryReveal.textContent = `Group found: ${foundCategory}`;
-      matchedGroups++;
-      if (matchedGroups === Object.keys(categories).length) {
-        categoryReveal.textContent += " 🎉 You found all groups!";
-      }
-    } else {
-      categoryReveal.textContent = "Try again!";
-      selectedImages.forEach(card => {
-        card.classList.remove("selected");
-        card.style.borderColor = "transparent";
-        card.style.boxShadow = "0 2px 6px rgba(42, 157, 143, 0.3)";
-        card.setAttribute("aria-pressed", "false");
-      });
-    }
-    selectedImages = [];
-  }
-
-  function initGame() {
-    matchedGroups = 0;
-    categoryReveal.textContent = "";
-    selectedImages = [];
-    gameBoard.innerHTML = "";
-    shuffle(allImages);
-    allImages.forEach(img => {
-      const card = createCard(img);
-      gameBoard.appendChild(card);
-    });
-  }
-
-  resetBtn.addEventListener("click", initGame);
-
-  // Initialize game on page load
-  initGame();
-</script>
+  <section id="dots">
+    <h2>
+    <video controls>
+      <source src="I hope you like!!-2.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </section>
 
 </body>
 </html>
-
